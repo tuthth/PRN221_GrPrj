@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.Repo.Imple;
 
-namespace Web.Pages.ProductionStepPage
+namespace Web.Pages.StaffPage
 {
     public class IndexModel : PageModel
     {
@@ -19,13 +19,13 @@ namespace Web.Pages.ProductionStepPage
             
         }
 
-        public IList<ProductionStep> ProductionStep { get;set; } = default!;
+        public IList<Staff> Staff { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_birdManageRepo.GetProductionSteps() != null)
+            if (_birdManageRepo.getAllStaffs() != null)
             {
-                ProductionStep = _birdManageRepo.GetProductionSteps();
+                Staff = _birdManageRepo.getAllStaffs();
             }
         }
     }

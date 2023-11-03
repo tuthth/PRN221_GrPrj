@@ -6,28 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Models.Repo.Imple;
 
 namespace Web.Pages.ProductionStepPage
 {
     public class DetailsModel : PageModel
     {
-        private readonly Models.Models.BirdCageManagementsContext _context;
+        private readonly BirdManageRepo _birdManageRepo = new BirdManageRepo();
 
-        public DetailsModel(Models.Models.BirdCageManagementsContext context)
+        public DetailsModel()
         {
-            _context = context;
+            
         }
 
       public ProductionStep ProductionStep { get; set; } = default!; 
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _context.ProductionSteps == null)
+            if (id == null ||_birdManageRepo.GetProductionSteps() == null)
             {
                 return NotFound();
             }
 
-            var productionstep = await _context.ProductionSteps.FirstOrDefaultAsync(m => m.StepId == id);
+            var productionstep = _birdManageRepo.getProductionStep(id);
             if (productionstep == null)
             {
                 return NotFound();

@@ -6,29 +6,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Models.Repo.Imple;
 
 namespace Web.Pages.ProductionStepPage
 {
     public class DeleteModel : PageModel
     {
-        private readonly Models.Models.BirdCageManagementsContext _context;
+        private readonly BirdManageRepo _birdManagRepo = new BirdManageRepo();
 
-        public DeleteModel(Models.Models.BirdCageManagementsContext context)
+        public DeleteModel()
         {
-            _context = context;
+            
         }
 
         [BindProperty]
       public ProductionStep ProductionStep { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _context.ProductionSteps == null)
+            if (id == null || _birdManagRepo.GetProductionSteps() == null)
             {
                 return NotFound();
             }
 
-            var productionstep = await _context.ProductionSteps.FirstOrDefaultAsync(m => m.StepId == id);
+            var productionstep = _birdManagRepo.getProductionStep(id);
 
             if (productionstep == null)
             {
@@ -41,19 +42,18 @@ namespace Web.Pages.ProductionStepPage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null || _context.ProductionSteps == null)
+            if (id == null || _birdManagRepo.GetProductionSteps() == null)
             {
                 return NotFound();
             }
-            var productionstep = await _context.ProductionSteps.FindAsync(id);
+            var productionstep = _birdManagRepo.getProductionStep(id);
 
             if (productionstep != null)
             {
                 ProductionStep = productionstep;
-                _context.ProductionSteps.Remove(ProductionStep);
-                await _context.SaveChangesAsync();
+                await _birdManagRepo.deleteProductionStep(productionstep);
             }
 
             return RedirectToPage("./Index");

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.Repo.Imple;
 
-namespace Web.Pages.ProductionStepPage
+namespace Web.Pages.StaffPage
 {
     public class EditModel : PageModel
     {
@@ -17,25 +17,25 @@ namespace Web.Pages.ProductionStepPage
 
         public EditModel()
         {
-           
+            
         }
 
         [BindProperty]
-        public ProductionStep ProductionStep { get; set; } = default!;
+        public Staff Staff { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _birdManageRepo.GetProductionSteps() == null)
+            if (id == null || _birdManageRepo.getAllStaffs() == null)
             {
                 return NotFound();
             }
 
-            var productionstep = _birdManageRepo.getProductionStep(id);
-            if (productionstep == null) 
+            var staff = _birdManageRepo.getStaff(id);
+            if (staff == null)
             {
                 return NotFound();
             }
-            ProductionStep = productionstep;
+            Staff = staff;
             return Page();
         }
 
@@ -47,9 +47,10 @@ namespace Web.Pages.ProductionStepPage
             {
                 return Page();
             }
+
             try
             {
-                await _birdManageRepo.updateProductionStep(ProductionStep);
+                await _birdManageRepo.updateStaff(Staff);
             }
             catch (Exception e)
             {
@@ -59,6 +60,5 @@ namespace Web.Pages.ProductionStepPage
             return RedirectToPage("./Index");
         }
 
-       
     }
 }

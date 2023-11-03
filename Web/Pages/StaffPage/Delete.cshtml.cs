@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Models.Models;
 using Models.Repo.Imple;
 
-namespace Web.Pages.ProductsPage
+namespace Web.Pages.StaffPage
 {
     public class DeleteModel : PageModel
     {
@@ -20,41 +20,40 @@ namespace Web.Pages.ProductsPage
         }
 
         [BindProperty]
-      public Product Product { get; set; } = default!;
+      public Staff Staff { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _birdManageRepo.getAllProducts() == null)
+            if (id == null || _birdManageRepo.getAllStaffs() == null)
             {
                 return NotFound();
             }
 
-            var product = _birdManageRepo.getProductById(id);
+            var staff = _birdManageRepo.getStaff(id);
 
-            if (product == null)
+            if (staff == null)
             {
                 return NotFound();
             }
             else 
             {
-                Product = product;
+                Staff = staff;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (id == null || _birdManageRepo.getAllProducts() == null)
+            if (id == null || _birdManageRepo.getAllStaffs() == null)
             {
                 return NotFound();
             }
+            var staff = _birdManageRepo.getStaff(id);
 
-            var product = _birdManageRepo.getProductById(id);
-
-            if (product != null)
+            if (staff != null)
             {
-                Product = product;
-                await _birdManageRepo.deleteProduct(product);
+                Staff = staff;
+                await _birdManageRepo.deleteStaff(staff);
             }
 
             return RedirectToPage("./Index");

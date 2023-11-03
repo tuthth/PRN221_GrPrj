@@ -7,29 +7,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models.Models;
+using Models.Repo.Imple;
 
 namespace Web.Pages.ProductsPage
 {
     public class EditModel : PageModel
     {
-        private readonly Models.Models.BirdCageManagementsContext _context;
+        private readonly BirdManageRepo _birdManageRepo = new BirdManageRepo();
 
-        public EditModel(Models.Models.BirdCageManagementsContext context)
+        public EditModel()
         {
-            _context = context;
         }
 
         [BindProperty]
         public Product Product { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null || _context.Products == null)
+            if (id == null || _birdManageRepo.getAllProducts() == null)
             {
                 return NotFound();
             }
 
-            var product =  await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = _birdManageRepo.getProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -47,30 +47,19 @@ namespace Web.Pages.ProductsPage
                 return Page();
             }
 
-            _context.Attach(Product).State = EntityState.Modified;
+           
 
             try
             {
-                await _context.SaveChangesAsync();
+               await _birdManageRepo.updateProduct(Product);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!ProductExists(Product.ProductId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                Console.WriteLine(e.Message);
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool ProductExists(int id)
-        {
-          return (_context.Products?.Any(e => e.ProductId == id)).GetValueOrDefault();
-        }
     }
 }

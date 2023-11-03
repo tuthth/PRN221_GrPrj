@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Models;
 using Models.Repo.Imple;
 
-namespace Web.Pages.ProductionStepPage
+namespace Web.Pages.StaffPage
 {
     public class CreateModel : PageModel
     {
@@ -16,7 +16,7 @@ namespace Web.Pages.ProductionStepPage
 
         public CreateModel()
         {
-            
+           
         }
 
         public IActionResult OnGet()
@@ -25,18 +25,19 @@ namespace Web.Pages.ProductionStepPage
         }
 
         [BindProperty]
-        public ProductionStep ProductionStep { get; set; } = default!;
+        public Staff Staff { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid ||_birdManageRepo.GetProductionSteps() == null || ProductionStep == null)
+          if (!ModelState.IsValid || _birdManageRepo.getAllStaffs() == null || Staff == null)
             {
                 return Page();
             }
 
-            await _birdManageRepo.createProductionStep(ProductionStep);
+            await _birdManageRepo.createStaff(Staff);
+
             return RedirectToPage("./Index");
         }
     }

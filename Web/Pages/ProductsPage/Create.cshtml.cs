@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Models;
+using Models.Repo.Imple;
 
 namespace Web.Pages.ProductsPage
 {
     public class CreateModel : PageModel
     {
-        private readonly Models.Models.BirdCageManagementsContext _context;
+        private readonly BirdManageRepo _birdManageRepo = new BirdManageRepo();
 
-        public CreateModel(Models.Models.BirdCageManagementsContext context)
+        public CreateModel()
         {
-            _context = context;
         }
 
         public IActionResult OnGet()
@@ -30,13 +30,12 @@ namespace Web.Pages.ProductsPage
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Products == null || Product == null)
+          if (!ModelState.IsValid || _birdManageRepo.getAllProducts() == null || Product == null)
             {
                 return Page();
             }
 
-            _context.Products.Add(Product);
-            await _context.SaveChangesAsync();
+            await _birdManageRepo.addProduct(Product);
 
             return RedirectToPage("./Index");
         }
