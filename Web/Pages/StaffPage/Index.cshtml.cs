@@ -21,12 +21,17 @@ namespace Web.Pages.StaffPage
 
         public IList<Staff> Staff { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public IActionResult OnGetAsync()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             if (_birdManageRepo.getAllStaffs() != null)
             {
                 Staff = _birdManageRepo.getAllStaffs();
             }
+            return Page();
         }
     }
 }

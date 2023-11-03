@@ -23,6 +23,10 @@ namespace Web.Pages.ProductsPage
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             if (id == null || _birdManageRepo.getAllProducts() == null)
             {
                 return NotFound();

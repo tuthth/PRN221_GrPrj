@@ -24,6 +24,10 @@ namespace Web.Pages.ProductionStepPage
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             if (id == null || _birdManagRepo.GetProductionSteps() == null)
             {
                 return NotFound();

@@ -21,12 +21,17 @@ namespace Web.Pages.ProductionStepPage
 
         public IList<ProductionStep> ProductionStep { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public IActionResult OnGetAsync()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             if (_birdManageRepo.GetProductionSteps() != null)
             {
                 ProductionStep = _birdManageRepo.GetProductionSteps();
             }
+            return Page();
         }
     }
 }

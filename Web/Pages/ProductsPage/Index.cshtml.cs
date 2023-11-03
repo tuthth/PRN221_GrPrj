@@ -19,12 +19,19 @@ namespace Web.Pages.ProductsPage
 
         public IList<Product> Product { get;set; } = default!;
 
-        public async Task OnGetAsync()
+
+        public IActionResult OnGetAsync()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
+           
             if (_birdManageRepo.getAllProducts().Count > 0)
             {
                 Product = _birdManageRepo.getAllProducts();
             }
+            return Page();
         }
     }
 }

@@ -21,14 +21,16 @@ namespace Web.Pages.ProductionStepPage
 
         public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             return Page();
         }
 
         [BindProperty]
         public ProductionStep ProductionStep { get; set; } = default!;
         
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
           if (!ModelState.IsValid ||_birdManageRepo.GetProductionSteps() == null || ProductionStep == null)

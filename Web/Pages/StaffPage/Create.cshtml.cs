@@ -21,6 +21,10 @@ namespace Web.Pages.StaffPage
 
         public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             return Page();
         }
 

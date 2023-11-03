@@ -20,6 +20,10 @@ namespace Web.Pages.ProductsPage
 
         public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("username") == null)
+            {
+                return RedirectToPage("/Logout");
+            }
             return Page();
         }
 
@@ -27,7 +31,6 @@ namespace Web.Pages.ProductsPage
         public Product Product { get; set; } = default!;
         
 
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
           if (!ModelState.IsValid || _birdManageRepo.getAllProducts() == null || Product == null)
